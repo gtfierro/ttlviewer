@@ -1,9 +1,65 @@
 <html>
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin:40px auto;
+            max-width:850px;
+            line-height:1.6;
+            font-size:18px;
+            font-family: Inconsolata, monospace;
+            color:#444;
+            padding:0 10px;
+            font-weight: 400;
+            line-height: 24px;
+        }
+        h1,h2,h3 {
+            line-height:1.2;
+            color:#333;
+            text-align: left;
+        }
+        a {
+            text-decoration: none;
+        }
+        a:link {
+            color: blue;
+        }
+        a:visited {
+            color: blue;
+        }
+        a:active {
+            color: blue;
+        }
+        a:hover {
+            color: blue;
+            border-bottom:1px dotted blue;
+        }
+        img {
+            float: left;
+            padding-right: 40px;
+        }
+        #intro {
+            float: right;
+        }
+    </style>
   	<title>Brick TTL Viewer</title>
   </head>
   <body>
     <h1>Brick TTL Viewer</h1>
+    <p>
+        This is a simple site I threw together to help visualize how  <a href="http://brickschema.org/">Brick</a> classes are used in real building
+        realizations. The (admittedly hacky) source can be found <a href="https://github.com/gtfierro/ttlviewer">here</a>.
+    </p>
+    <p>
+        <b>To use</b>, upload a <code>.ttl</code> file such as those <a href="https://github.com/BuildSysUniformMetadata/GroundTruth/tree/master/building_instances">found here</a>
+        and click "upload"; this will render a PDF in your browser that shows how instances of Brick classes are connected and what relationships
+        they use.
+    </p>
+    <p>
+        Not all <code>.ttl</code> files seem to work, but this is an issue with the <a href="https://github.com/d4l3k/turtle">.ttl parsing library</a>
+        I am using. <a href="/static/soda.pdf">Here</a> is an example output for Soda Hall at UC Berkeley.
+    </p>
   	<form enctype="multipart/form-data" action="/upload" method="post">
 		<input type="file" name="uploadfile" />
 		<input type="hidden" name="token" value="{{.}}" />

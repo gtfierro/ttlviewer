@@ -62,6 +62,7 @@ func main() {
 	flag.Parse()
 	http.HandleFunc("/", index)
 	http.HandleFunc("/upload", upload)
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	log.Printf("Serving on %s...\n", ":"+*port)
 	log.Fatal(http.ListenAndServe(":"+*port, nil))
 }
