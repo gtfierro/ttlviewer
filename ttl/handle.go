@@ -1,13 +1,24 @@
 package ttl
 
 import (
+	"crypto/md5"
+	"encoding/binary"
 	"fmt"
 	"github.com/d4l3k/turtle"
 	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"time"
 )
+
+func gethash() string {
+	h := md5.New()
+	seed := make([]byte, 16)
+	binary.PutVarint(seed, time.Now().UnixNano())
+	h.Write(seed)
+	return fmt.Sprintf("%x", h.Sum(nil))
+}
 
 func RunFile(ttl io.Reader) ([]byte, error) {
 	var ret []byte
@@ -30,7 +41,8 @@ func RunFile(ttl io.Reader) ([]byte, error) {
 		}
 	}
 
-	f, err := os.Create("output.gv")
+	name := gethash() + ".gv"
+	f, err := os.Create(name)
 	if err != nil {
 		return ret, err
 	}
@@ -52,6 +64,8 @@ func RunFile(ttl io.Reader) ([]byte, error) {
 		}
 	}
 	fmt.Fprintln(f, "}")
-	cmd := exec.Command("dot", "-Tpdf", "output.gv")
-	return cmd.Output()
+	cmd := exec.Command("dot", "-Tpdf", name)
+	res, err := cmd.Output()
+	os.Remove(name)
+	return res, err
 }
