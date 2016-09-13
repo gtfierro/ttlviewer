@@ -1,0 +1,13 @@
+<html>
+  <head>
+  	<title>Brick TTL Viewer</title>
+  </head>
+  <body>
+    <h1>Brick TTL Viewer</h1>
+  	<form enctype="multipart/form-data" action="/upload" method="post">
+		<input type="file" name="uploadfile" />
+		<input type="hidden" name="token" value="{{.}}" />
+		<input type="submit" value="upload" />
+	</form>
+  </body>
+</html>
