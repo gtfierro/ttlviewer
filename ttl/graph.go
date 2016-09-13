@@ -29,6 +29,9 @@ func NewGraph(triples []turtle.Triple) *Graph {
 	var newTriples []turtle.Triple
 	for _, triple := range triples {
 		if trimName(triple.Pred) == "type" {
+			if trimName(triple.Obj) == "NamedIndividual" {
+				continue
+			}
 			g.types[trimName(triple.Subj)] = trimName(triple.Obj)
 		} else {
 			newTriples = append(newTriples, triple)
