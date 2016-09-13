@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/d4l3k/turtle"
 	"github.com/gtfierro/ttlviewer/ttl"
 	"log"
 	"os"
@@ -18,7 +17,21 @@ func main() {
 		os.Exit(1)
 	}
 
-	err := ttl.RunFile(flag.Args()[flag.NArg()-1])
+	reader, err := os.Open(flag.Args()[flag.NArg()-1])
+	if err != nil {
+		log.Panic(err)
+	}
+	output, err := ttl.RunFile(reader)
+	if err != nil {
+		log.Panic(err)
+	}
+	f, err := os.Create(*outputFile)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	_, err = f.Write(output)
+
 	if err != nil {
 		log.Panic(err)
 	}

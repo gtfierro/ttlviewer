@@ -1,24 +1,27 @@
 package ttl
 
 import (
+	"fmt"
 	"github.com/d4l3k/turtle"
+	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"strings"
 )
 
-func RunFile(filename string) error {
-	reader, err := ioutil.ReadFile(filename)
+func RunFile(ttl io.Reader) ([]byte, error) {
+	var ret []byte
+	// I KNOW not to use this; dirty hack until I have a better solution. Issue is the ttl parser only works on []byte
+	bytes, err := ioutil.ReadAll(ttl)
 	if err != nil {
-		return err
+		return ret, err
 	}
-	out, err := turtle.Parse(reader)
+	out, err := turtle.Parse(bytes)
 	if err != nil {
-		return err
+		return ret, err
 	}
 
-	g := ttl.NewGraph(out)
+	g := NewGraph(out)
 
 	for _, node := range g.nodes {
 		fmt.Printf("> Name: %v, Type %v\n", node.name, node.otype)
@@ -29,7 +32,7 @@ func RunFile(filename string) error {
 
 	f, err := os.Create("output.gv")
 	if err != nil {
-		return err
+		return ret, err
 	}
 
 	fmt.Fprintln(f, "digraph G {")
@@ -49,7 +52,6 @@ func RunFile(filename string) error {
 		}
 	}
 	fmt.Fprintln(f, "}")
-	fmt.Println("output to", *outputFile)
-	cmd := exec.Command("dot", "-Tpdf", "output.gv", "-o", *outputFile)
-	return cmd.Run()
+	cmd := exec.Command("dot", "-Tpdf", "output.gv")
+	return cmd.Output()
 }

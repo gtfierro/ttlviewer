@@ -2,6 +2,7 @@ package ttl
 
 import (
 	"github.com/d4l3k/turtle"
+	"strings"
 )
 
 type Graph struct {
