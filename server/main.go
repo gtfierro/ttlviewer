@@ -37,7 +37,7 @@ func upload(rw http.ResponseWriter, req *http.Request) {
 		index(rw, req)
 		return
 	}
-	if err := req.ParseMultipartForm(1 << 20); err != nil {
+	if err := req.ParseMultipartForm(5 << 20); err != nil {
 		rw.WriteHeader(500)
 		rw.Write([]byte(err.Error()))
 		return
