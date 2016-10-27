@@ -1,7 +1,7 @@
 package ttl
 
 import (
-	"github.com/d4l3k/turtle"
+	turtle "github.com/gtfierro/hod/goraptor"
 	"strings"
 )
 
@@ -28,11 +28,11 @@ func NewGraph(triples []turtle.Triple) *Graph {
 	// remove the "type" triples from the list
 	var newTriples []turtle.Triple
 	for _, triple := range triples {
-		if trimName(triple.Pred) == "type" {
-			if trimName(triple.Obj) == "NamedIndividual" {
+		if triple.Predicate.Value == "type" {
+			if triple.Object.Value == "NamedIndividual" {
 				continue
 			}
-			g.types[trimName(triple.Subj)] = trimName(triple.Obj)
+			g.types[triple.Subject.Value] = triple.Object.Value
 		} else {
 			newTriples = append(newTriples, triple)
 		}
@@ -47,10 +47,10 @@ func NewGraph(triples []turtle.Triple) *Graph {
 }
 
 func (g *Graph) addTriple(triple turtle.Triple) {
-	subj := trimName(triple.Subj)
+	subj := triple.Subject.Value
 	subType := g.types[subj]
-	pred := trimName(triple.Pred)
-	obj := trimName(triple.Obj)
+	pred := triple.Predicate.Value
+	obj := triple.Object.Value
 	objType := g.types[obj]
 	// make subject node
 	if _, found := g.nodes[subType]; !found {

@@ -4,9 +4,8 @@ import (
 	"crypto/md5"
 	"encoding/binary"
 	"fmt"
-	"github.com/d4l3k/turtle"
+	turtle "github.com/gtfierro/hod/goraptor"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"time"
@@ -22,17 +21,13 @@ func gethash() string {
 
 func RunFile(ttl io.Reader) ([]byte, error) {
 	var ret []byte
-	// I KNOW not to use this; dirty hack until I have a better solution. Issue is the ttl parser only works on []byte
-	bytes, err := ioutil.ReadAll(ttl)
-	if err != nil {
-		return ret, err
-	}
-	out, err := turtle.Parse(bytes)
+	p := turtle.GetParser()
+	dataset, _, err := p.ParseReader(ttl)
 	if err != nil {
 		return ret, err
 	}
 
-	g := NewGraph(out)
+	g := NewGraph(dataset.Triples)
 
 	for _, node := range g.nodes {
 		fmt.Printf("> Name: %v, Type %v\n", node.name, node.otype)
