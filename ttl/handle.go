@@ -6,6 +6,7 @@ import (
 	"fmt"
 	turtle "github.com/gtfierro/hod/goraptor"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"time"
@@ -19,12 +20,13 @@ func gethash() string {
 	return fmt.Sprintf("%x", h.Sum(nil))
 }
 
-func RunFile(ttl io.Reader) ([]byte, error) {
+// if keepDOT is True, then keep the DOT file around
+func RunFile(ttl io.Reader, keepDOT bool) (pdf []byte, dot []byte, err error) {
 	var ret []byte
 	p := turtle.GetParser()
 	dataset, _, err := p.ParseReader(ttl)
 	if err != nil {
-		return ret, err
+		return ret, ret, err
 	}
 
 	g := NewGraph(dataset.Triples)
@@ -39,7 +41,7 @@ func RunFile(ttl io.Reader) ([]byte, error) {
 	name := gethash() + ".gv"
 	f, err := os.Create(name)
 	if err != nil {
-		return ret, err
+		return ret, ret, err
 	}
 
 	fmt.Fprintln(f, "digraph G {")
@@ -60,7 +62,23 @@ func RunFile(ttl io.Reader) ([]byte, error) {
 	}
 	fmt.Fprintln(f, "}")
 	cmd := exec.Command("dot", "-Tpdf", name)
-	res, err := cmd.Output()
-	os.Remove(name)
-	return res, err
+	pdf, err = cmd.Output()
+	if err != nil {
+		return ret, ret, err
+	}
+
+	// grab contents of the DOT file
+	file, err := os.Open(name)
+	if err != nil {
+		return ret, ret, err
+	}
+	dot, err = ioutil.ReadAll(file)
+	if err != nil {
+		return ret, ret, err
+	}
+
+	if !keepDOT {
+		os.Remove(name)
+	}
+	return pdf, dot, err
 }

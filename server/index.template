@@ -61,8 +61,10 @@
         I am using. <a href="/static/soda.pdf">Here</a> is an example output for Soda Hall at UC Berkeley.
     </p>
   	<form enctype="multipart/form-data" action="/upload" method="post">
-		<input type="file" name="uploadfile" />
-		<input type="hidden" name="token" value="{{.}}" />
+		<input type="file" name="uploadfile" /> <br /> <br />
+        <input type="radio" name="render" value="pdf"> PDF <br />
+        <input type="radio" name="render" value="interactive" checked> Interactive <br />
+		<input type="hidden" name="token" value="{{.}}" /> <br />
 		<input type="submit" value="upload" />
 	</form>
     <h3>TODO:</h3>

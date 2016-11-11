@@ -9,6 +9,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -49,13 +50,24 @@ func upload(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	defer file.Close()
-	pdf, err := ttl.RunFile(file)
+	renderOption := req.FormValue("render")
+	pdf, dot, err := ttl.RunFile(file, false)
 	if err != nil {
 		rw.WriteHeader(500)
 		rw.Write([]byte(err.Error()))
 		return
 	}
-	rw.Write(pdf)
+	if renderOption == "pdf" {
+		rw.Write(pdf)
+	} else {
+		template, err := template.ParseFiles("interact.template")
+		if err != nil {
+			rw.WriteHeader(500)
+			rw.Write([]byte(err.Error()))
+			return
+		}
+		template.Execute(rw, strings.Replace(string(dot), "\n", " ", -1))
+	}
 }
 
 func main() {

@@ -9,11 +9,12 @@ import (
 )
 
 var outputFile = flag.String("o", "output_graph.pdf", "Output file name for compiled graph")
+var keepDot = flag.Bool("k", false, "Whether or not to keep generated DOT file")
 
 func main() {
 	flag.Parse()
 	if flag.NArg() != 1 {
-		fmt.Println("Usage:\nttlviewer <ttl file>\nttlviewer -o <output pdf> <ttl file>")
+		fmt.Println("Usage:\nttlviewer <ttl file>\nttlviewer -o <output pdf> -k {false|true} <ttl file>")
 		os.Exit(1)
 	}
 
@@ -21,7 +22,7 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-	output, err := ttl.RunFile(reader)
+	output, _, err := ttl.RunFile(reader, *keepDot)
 	if err != nil {
 		log.Panic(err)
 	}
