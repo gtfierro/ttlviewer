@@ -16,6 +16,22 @@
 </head>
 <body>
 
+<div>
+<b>Note: this may take a few seconds to render</b>
+<p>
+    This is a basic visualization of the classes present in the given TTL file and how they
+    are connected to one another. 
+</p>
+<p>  
+    Clicking a node will "collapse" its children (nodes on the receiving
+    end of a directed edge) into itself, which can help make larger graphs easier to traverse.
+</p>
+<p>  
+    Scrolling will zoom in and out of the graph, and you can click and drag with the mouse to
+    move around.
+</p>
+</div>
+
 <div id="mynetwork"></div>
 
 <script type="text/javascript">
@@ -35,8 +51,8 @@
   };
   options.physics = {
     barnesHut: {
-        springLength: 150,
-        avoidOverlap: .5,
+        springLength: 200,
+        avoidOverlap: .2,
         springConstant: .01
     },
   };
