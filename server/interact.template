@@ -37,7 +37,7 @@
     barnesHut: {
         springLength: 150,
         avoidOverlap: .5,
-        sprintConstant: .01
+        springConstant: .01
     },
   };
 
