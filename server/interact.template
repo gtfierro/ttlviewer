@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+  <title>Network | Basic usage</title>
+
+  <script type="text/javascript" src="/static/vis.min.js"></script>
+  <link href="/static/vis-network.min.css" rel="stylesheet" type="text/css" />
+
+  <style type="text/css">
+    #mynetwork {
+      width: 100%;
+      height: 800px;
+      border: 1px solid lightgray;
+    }
+  </style>
+</head>
+<body>
+
+<p>
+  Create a simple network with some nodes and edges.
+</p>
+
+<div id="mynetwork"></div>
+
+<script type="text/javascript">
+  // create an array with nodes
+  var DOTstring = "{{.}}";
+  var parsedData = vis.network.convertDot(DOTstring);
+
+  // create a network
+  var container = document.getElementById('mynetwork');
+  var data = {
+    nodes: parsedData.nodes,
+    edges: parsedData.edges
+  };
+  var options = parsedData.options;
+  options.interaction = {
+    hover: true
+  };
+  options.physics = {
+    barnesHut: {
+        springLength: 120,
+        //avoidOverlap: .3,
+    },
+    timestep: 1
+  };
+
+  var network = new vis.Network(container, data, options);
+  network.on("selectNode", function (params) {
+      console.log('selectNode Event:', params);
+      if (network.isCluster(params.nodes[0])) {
+        network.openCluster(params.nodes[0]);
+      } else {
+        group(params);
+      }
+  });
+  network.on("deselectNode", function (params) {
+      console.log('deselectNode Event:', params);
+  });
+
+  function group(params) {
+    // have "nodes", "edges"
+    var name = params.nodes[0];
+    console.log("name",name);
+    clusterOptions = {
+        // only join if we are the 'to' of an edge that starts at the params.nodes[0] 'from'
+        joinCondition: function(childOpts) {
+            var clusterMe = false;
+            params.edges.forEach( function(e){
+                if (clusterMe) {
+                    return;
+                }
+                var edge = data.edges.find(function(o) {
+                    return o.id == e;
+                });
+                if (edge == null) { return; }
+                if (edge.to == childOpts.id || childOpts.id == name) {
+                    console.log("collapsing", childOpts.id);
+                    clusterMe = true;
+                    return false;
+                }
+            });
+            return clusterMe;
+        },
+        clusterNodeProperties: {id: 'cluster'+name, label: name, color: '#ff6666', borderwidth: 3}
+    };
+    network.cluster(clusterOptions);
+  }
+</script>
+
+</body>
+</html>
