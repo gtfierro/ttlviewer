@@ -1,0 +1,20 @@
+[Unit]
+Description="TTL Viewer"
+
+[Service]
+Restart=always
+RestartSec=1m
+ExecStartPre=/usr/bin/docker pull gtfierro/ttlviewer
+
+ExecStart=/bin/bash -c "/usr/bin/docker run \
+    --name %p \
+    --p 80:80 \
+    gtfierro/ttlviewer"
+
+ExecStop=/usr/bin/docker stop -t 30 %p ; /usr/bin/docker rm -f %p
+
+[Install]
+WantedBy=multi-user.target
+
+[Install]
+WantedBy=multi-user.target
