@@ -48,7 +48,9 @@ func upload(rw http.ResponseWriter, req *http.Request) {
 	if url != "" { // then we have a url!
 		res, err := http.Get(url)
 		if err != nil {
-			log.Fatal(err)
+			rw.WriteHeader(500)
+			rw.Write([]byte(err.Error()))
+			return
 		}
 		defer res.Body.Close()
 		pdf, dot, err = ttl.RunFile(res.Body, false)
