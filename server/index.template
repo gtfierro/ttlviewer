@@ -67,12 +67,5 @@
 		<input type="hidden" name="token" value="{{.}}" /> <br />
 		<input type="submit" value="upload" />
 	</form>
-    <h3>TODO:</h3>
-    <p>
-        <ul>
-            <li>Compress symmetric relationships (e.g. <code>isPointOf/hasPoint</code>) to a single edge</li>
-            <li>Fix <code>.ttl</code> parser to be more forgiving</li>
-        </ul>
-    </p>
   </body>
 </html>

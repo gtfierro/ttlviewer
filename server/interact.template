@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Network | Basic usage</title>
+  <title>BRICK Interactive Visualization</title>
 
   <script type="text/javascript" src="/static/vis.min.js"></script>
   <link href="/static/vis-network.min.css" rel="stylesheet" type="text/css" />
@@ -15,10 +15,6 @@
   </style>
 </head>
 <body>
-
-<p>
-  Create a simple network with some nodes and edges.
-</p>
 
 <div id="mynetwork"></div>
 
@@ -39,10 +35,10 @@
   };
   options.physics = {
     barnesHut: {
-        springLength: 120,
-        //avoidOverlap: .3,
+        springLength: 150,
+        avoidOverlap: .5,
+        sprintConstant: .01
     },
-    timestep: 1
   };
 
   var network = new vis.Network(container, data, options);
