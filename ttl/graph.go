@@ -1,7 +1,7 @@
 package ttl
 
 import (
-	turtle "github.com/gtfierro/hod/goraptor"
+	"github.com/gtfierro/hod/turtle"
 	"strings"
 )
 

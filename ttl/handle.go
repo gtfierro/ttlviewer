@@ -4,7 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/binary"
 	"fmt"
-	turtle "github.com/gtfierro/hod/goraptor"
+	"github.com/gtfierro/hod/turtle"
 	"io"
 	"io/ioutil"
 	"os"

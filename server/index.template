@@ -48,8 +48,7 @@
   <body>
     <h1>Brick TTL Viewer</h1>
     <p>
-        This is a simple site I threw together to help visualize how  <a href="http://brickschema.org/">Brick</a> classes are used in real building
-        realizations. The (admittedly hacky) source can be found <a href="https://github.com/gtfierro/ttlviewer">here</a>.
+        This is a simple site for visualizing how <a href="http://brickschema.org/">Brick</a> classes are used to describe real buildings. This site does not render the full Brick model; it only visualizes the relationships between instances of classes in order to make visualizing the model tractable. The source for this site can be found <a href="https://github.com/gtfierro/ttlviewer">here</a>.
     </p>
     <p>
         <b>To use</b>, upload a <code>.ttl</code> file such as those <a href="https://github.com/BuildSysUniformMetadata/GroundTruth/tree/master/building_instances">found here</a>
