@@ -1,0 +1,39 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+    name: ttlviewer
+    labels:
+        app: ttlviewer
+spec:
+    serviceName: "ttlviewer"
+    replicas: 1
+    selector:
+        matchLabels:
+            app: ttlviewer
+    template:
+        metadata:
+            labels:
+                app: ttlviewer
+        spec:
+            containers:
+                - name: ttlviewer
+                  image:  gtfierro/ttlviewer
+                  imagePullPolicy: Always
+                  ports:
+                    - containerPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+    name: ttlviewer
+spec:
+    type: ClusterIP
+    externalIPs:
+    - << ip address here >>
+    selector:
+        app: ttlviewer
+    ports:
+    - protocol: TCP
+      port: 47890
+      targetPort: 80
+      name: http
