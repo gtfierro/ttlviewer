@@ -55,7 +55,8 @@ func upload(rw http.ResponseWriter, req *http.Request) {
 		defer res.Body.Close()
 		pdf, dot, err = ttl.RunFile(res.Body, false)
 	} else {
-		if err := req.ParseMultipartForm(5 << 20); err != nil {
+		//32 megabyte max size
+		if err := req.ParseMultipartForm(32 << 20); err != nil {
 			rw.WriteHeader(500)
 			rw.Write([]byte(err.Error()))
 			return

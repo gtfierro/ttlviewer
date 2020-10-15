@@ -4,7 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/binary"
 	"fmt"
-	"github.com/gtfierro/hod/turtle"
+	"github.com/gtfierro/hoddb/turtle"
 	"io"
 	"io/ioutil"
 	"os"
@@ -23,8 +23,18 @@ func gethash() string {
 // if keepDOT is True, then keep the DOT file around
 func RunFile(ttl io.Reader, keepDOT bool) (pdf []byte, dot []byte, err error) {
 	var ret []byte
-	p := turtle.GetParser()
-	dataset, _, err := p.ParseReader(ttl)
+
+	// put turtle file in temp file
+	tmpfile, err := ioutil.TempFile("", "ttlviewer")
+	if err != nil {
+		return ret, ret, err
+	}
+	defer os.Remove(tmpfile.Name())
+	if _, err := io.Copy(tmpfile, ttl); err != nil {
+		return ret, ret, err
+	}
+
+	dataset, err := turtle.Parse(tmpfile.Name())
 	if err != nil {
 		return ret, ret, err
 	}
